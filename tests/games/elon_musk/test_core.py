@@ -23,7 +23,7 @@ assert res[0] is msg.GameCreated
 assert res[0].chat == group1
 assert res[0].code == "ELON123"
 assert game1.participants == []
-assert game1.current_round is Nil
+assert game1.current_round is None
 assert game1.history == []
 
 # users can join the game via private chat
@@ -66,7 +66,7 @@ assert len(res) == 1
 assert res[0] is msg.GameNotEnoughParticipants
 assert res[0].chat == group1
 assert res[0].participants == [user1, user2, user3]
-assert game1.current_round is Nil
+assert game1.current_round is None
 
 # user4
 res = game1.join_private(user = user3, chat = private3)
