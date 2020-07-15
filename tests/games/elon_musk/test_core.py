@@ -2,7 +2,7 @@ from telegram import User, Chat
 from bot.games.elon_musk.core.game import Game
 from bot.games.elon_musk.core.shared import Problem, Solution
 import bot.games.elon_musk.core.message as msg
-import bot.games.elon_musk.core.context as ctx
+import bot.games.elon_musk.core.reply as rpl
 
 user1 = User(1, "User 1", is_bot = False)
 user2 = User(2, "User 2", is_bot = False)
@@ -90,8 +90,8 @@ assert res[0].giving_problem == user1
 assert res[1] is msg.RoundDemandProblem
 assert res[1].chat == private1
 assert res[1].user == user1
-assert res[1].register_message_context is ctx.SubmitProblem
-round1 = res[1].register_message_context.round
+assert res[1].reply_context is rpl.SubmitProblem
+round1 = res[1].reply_context.round
 assert game1.current_round.id == round1
 assert game1.current_round.giving_problem == user1.id
 assert game1.current_round.solutions == {}
@@ -109,8 +109,8 @@ assert res[1].chat == group1
 assert res[1].problem == problem1
 assert res[1].giving_problem == user1
 assert res[1].solution_order == [user2, user3, user4]
-assert res[1].register_message_context is ctx.SubmitSolution
-assert res[1].register_message_context.round == round1
+assert res[1].reply_context is rpl.SubmitSolution
+assert res[1].reply_context.round == round1
 # tell every user the problem (first one is the randomly chosen "Elon Musk")
 assert res[2] is msg.RoundNotifyProblem
 assert res[2].problem == Problem(user1, "Elon Musk")
@@ -176,8 +176,8 @@ assert res[0].giving_problem == user2
 assert res[1] is msg.RoundDemandProblem
 assert res[1].chat == private2
 assert res[1].user == user2
-assert res[1].register_message_context is ctx.SubmitProblem
-round2 = res[1].register_message_context.round
+assert res[1].reply_context is rpl.SubmitProblem
+round2 = res[1].reply_context.round
 assert game1.current_round.id == round2
 assert game1.current_round.giving_problem == user2.id
 assert game1.current_round.solutions == {}
