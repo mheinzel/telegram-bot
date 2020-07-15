@@ -1,16 +1,61 @@
-from collections import namedtuple
+from typing import NamedTuple, List
+import bot.games.elon_musk.core.reply as reply
+from bot.games.elon_musk.core.shared import Problem, Solution
+from telegram import Chat, User
 
-GameCreated = namedtuple("GameCreated", "chat code")
-GameJoinedPrivate = namedtuple("GameJoinedPrivate", "chat joined_user")
-GameJoined = namedtuple("GameJoined", "chat joined_user")
-GameNotEnoughParticipants = namedtuple("GameNotEnoughParticipants", "chat participants")
+class GameCreated(NamedTuple):
+    chat: Chat
+    code: str
 
-RoundStarted = namedtuple("RoundStarted", "chat participants giving_problem")
-RoundDemandProblem = namedtuple("RoundDemandProblem", "chat user reply_context")
-RoundAcceptProblem = namedtuple("RoundAcceptProblem", "chat")
-RoundNotifyProblem = namedtuple("RoundNotifyProblem", "chat problem")
-RoundDemandSolutions = namedtuple("RoundDemandSolutions", "chat problem giving_problem solution_order reply_context")
-SolutionAlreadySubmitted = namedtuple("SolutionAlreadySubmitted", "chat solution")
-RoundNotFinishedYet = namedtuple("RoundNotFinishedYet", "chat missing_solutions")
-RoundSummary = namedtuple("RoundSummary", "chat problem solutions")
-RoundRevealed = namedtuple("RoundRevealed", "chat elon_musk")
+class GameJoinedPrivate(NamedTuple):
+    chat: Chat
+    joined_user: User
+
+class GameJoined(NamedTuple):
+    chat: Chat
+    joined_user: User
+
+class GameNotEnoughParticipants(NamedTuple):
+    chat: Chat
+    participants: List[User]
+
+class RoundStarted(NamedTuple):
+    chat: Chat
+    participants: List[User]
+    giving_problem: User
+
+class RoundDemandProblem(NamedTuple):
+    chat: Chat
+    user: User
+    reply_context: reply.ReplyContext
+
+class RoundAcceptProblem(NamedTuple):
+    chat: Chat
+
+class RoundNotifyProblem(NamedTuple):
+    chat: Chat
+    problem: Problem
+
+class RoundDemandSolutions(NamedTuple):
+    chat: Chat
+    problem: Problem
+    giving_problem: User
+    solution_order: List[User]
+    reply_context: reply.ReplyContext
+
+class SolutionAlreadySubmitted(NamedTuple):
+    chat: Chat
+    solution: Solution
+
+class RoundNotFinishedYet(NamedTuple):
+    chat: Chat
+    missing_solutions: List[User]
+
+class RoundSummary(NamedTuple):
+    chat: Chat
+    problem: Problem
+    solutions: Solution
+
+class RoundRevealed(NamedTuple):
+    chat: Chat
+    elon_musk: User

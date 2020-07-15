@@ -1,4 +1,10 @@
-from collections import namedtuple
+from typing import NamedTuple
 
-SubmitProblem = namedtuple("SubmitProblem", "round")
-SubmitSolution = namedtuple("SubmitSolution", "round")
+class ReplyContext:
+    pass
+
+class SubmitProblem(ReplyContext, NamedTuple):
+    round: int
+
+class SubmitSolution(ReplyContext, NamedTuple):
+    round: int

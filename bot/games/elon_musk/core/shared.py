@@ -1,5 +1,7 @@
-class Problem:
-    pass
+from typing import NamedTuple
 
-class Solution:
-    pass
+class Problem(NamedTuple):
+    text: str
+
+class Solution(NamedTuple):
+    text: str
