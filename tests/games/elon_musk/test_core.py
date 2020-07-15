@@ -1,5 +1,5 @@
 from telegram import User, Chat
-from bot.games.elon_musk.core.game import Game
+from bot.games.elon_musk.core.game import Game, create_game
 from bot.games.elon_musk.core.shared import Problem, Solution
 import bot.games.elon_musk.core.message as msg
 import bot.games.elon_musk.core.reply as rpl
@@ -17,7 +17,7 @@ private4 = Chat(13, 'private')
 group1 = Chat(101, 'group')
 
 # create new game
-game1, res = Game(chat = group1, code = "ELON123")
+game1, res = create_game(chat = group1, code = "ELON123")
 assert len(res) == 1
 assert res[0] is msg.GameCreated
 assert res[0].chat == group1
