@@ -108,8 +108,8 @@ assert isinstance(res[3], msg.RoundNotifyProblem)
 assert res[3].problem == problem1
 assert isinstance(res[4], msg.RoundNotifyProblem)
 assert res[4].problem == problem1
-assert set(r.chat for r in res[2:4]) == {private2, private3, private4}
-round1_elon = res[2].user
+assert set(r.chat for r in res[2:5]) == {private2, private3, private4}
+round1_elon = [user2, user3, user4][[private2, private3, private4].index(res[2].chat)]
 
 # other participants submit their solutions in order
 solution_user2 = Solution(user2, "Solution 2")
