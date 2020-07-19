@@ -20,7 +20,11 @@ class Game:
         return [message.GameCreated(self.chat, self.code)]
 
     def join_private(self, user, chat):
-        self.participants += [user]
+        if user in self.participants:
+            # TODO: add helpful message
+            return []
+
+        self.participants.append(user)
         self.private_chats[user.id] = chat
         res  = [message.GameJoinedPrivate(chat, self.code, user)]
         res += [message.GameJoined(self.chat, user)]
@@ -36,7 +40,7 @@ class Game:
         if self.current_round is not None:
             self.history += [self.current_round]
         giving_problem = self.participants[0]
-        giving_solutions = [p for p in self.participants if p != giving_problem]
+        giving_solutions = self.participants[1:]
         # new round id is larger than all previous ones, starting at 1
         new_round_id = max((r.id for r in self.history), default = 0) + 1
         new_round = Round(new_round_id, giving_problem, giving_solutions)

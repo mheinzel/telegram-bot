@@ -18,3 +18,4 @@ class Round():
         # no problem or solution was given yet
         self.problem = None
         self.solutions = {u: None for u in giving_solutions}
+        assert len(self.solutions) == len(giving_solutions)
