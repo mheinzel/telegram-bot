@@ -22,10 +22,6 @@ assert len(res) == 1
 assert isinstance(res[0], msg.GameCreated)
 assert res[0].chat == group1
 assert res[0].code == "ELON123"
-# TODO: remove checks?
-# assert game1.participants == []
-# assert game1.current_round is None
-# assert game1.history == []
 
 # users can join the game via private chat
 # user1
@@ -55,11 +51,6 @@ assert res[0].joined_user == user3
 assert isinstance(res[1], msg.GameJoined)
 assert res[1].chat == group1
 assert res[1].joined_user == user3
-# TODO: remove checks?
-# assert game1.participants == [user1, user2, user3]
-# assert game1.private_chats[user1.id] == private1
-# assert game1.private_chats[user2.id] == private2
-# assert game1.private_chats[user3.id] == private3
 
 # at least 4 participants are needed to start a game
 res = game1.start_round()
@@ -93,10 +84,6 @@ assert res[1].chat == private1
 assert res[1].user == user1
 assert isinstance(res[1].reply_context, rpl.SubmitProblem)
 round1 = res[1].reply_context.round
-# TODO: remove checks?
-# assert game1.current_round.id == round1
-# assert game1.current_round.giving_problem == user1
-# assert game1.current_round.solutions == {}
 
 # this person can submit a problem
 problem1 = Problem(user1, "Life is too short.")
@@ -180,9 +167,3 @@ assert res[1].chat == private2
 assert res[1].user == user2
 assert isinstance(res[1].reply_context, rpl.SubmitProblem)
 round2 = res[1].reply_context.round
-# TODO: remove checks?
-# assert game1.current_round.id == round2
-# assert game1.current_round.giving_problem == user2.id
-# assert game1.current_round.solutions == {}
-# assert len(game1.history) == 1
-# assert game1.history[0].id == round1
