@@ -54,6 +54,10 @@ assert isinstance(res[1], msg.GameJoined)
 assert res[1].chat == group1
 assert res[1].joined_user == user3
 
+# users can only join once
+res = game1.join_private(user = user2, chat = private2)
+assert len(res) == 0
+
 # at least 4 participants are needed to start a game
 res = game1.start_round()
 assert len(res) == 1
