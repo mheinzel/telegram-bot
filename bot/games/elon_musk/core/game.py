@@ -85,3 +85,11 @@ class Game:
 
         self.current_round.solutions[solution.submitted_by] = solution
         return []
+
+    def reveal(self):
+        missing_solutions = [u for u, s in self.current_round.solutions.items() if s is None]
+        if len(missing_solutions) > 0:
+            return [message.RoundNotFinishedYet(self.chat, missing_solutions)]
+
+        elon_musk = self.current_round.elon_musk
+        return [message.RoundRevealed(self.chat, self.code, elon_musk)]
