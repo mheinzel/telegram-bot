@@ -22,3 +22,6 @@ class Round():
         self.elon_musk = random.choice(giving_solutions)
         # This can be violated if `giving_solutions` contains duplicates.
         assert len(self.solutions) == len(giving_solutions)
+
+    def missing_solutions(self):
+        return [u for u, s in self.solutions.items() if s is None]

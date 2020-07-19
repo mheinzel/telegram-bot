@@ -9,7 +9,7 @@ def create_game(chat, code):
 
 class Game:
     def __init__(self, chat, code):
-        self.chat = chat
+        self.chat = chat # TODO: rename self.group_chat
         self.code = code
         self.participants = []
         self.private_chats = {}
@@ -79,15 +79,23 @@ class Game:
         # TODO: add helpful messages
         if round_id != self.current_round.id:
             return []
+        if self.current_round.problem is None:
+            return []
         existing_solution = self.current_round.solutions[solution.submitted_by]
         if existing_solution is not None:
             return [message.RoundSolutionAlreadySubmitted(self.chat, existing_solution)]
 
         self.current_round.solutions[solution.submitted_by] = solution
+
+        if len(self.current_round.missing_solutions()) == 0:
+            problem = self.current_round.problem
+            solutions = list(self.current_round.solutions.values())
+            return [message.RoundSummary(self.chat, problem, solutions)]
+
         return []
 
     def reveal(self):
-        missing_solutions = [u for u, s in self.current_round.solutions.items() if s is None]
+        missing_solutions = list(self.current_round.missing_solutions())
         if len(missing_solutions) > 0:
             return [message.RoundNotFinishedYet(self.chat, missing_solutions)]
 

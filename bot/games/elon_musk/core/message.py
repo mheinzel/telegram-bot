@@ -66,7 +66,7 @@ class RoundNotFinishedYet(Message, NamedTuple):
 class RoundSummary(Message, NamedTuple):
     chat: Chat
     problem: Problem
-    solutions: Solution
+    solutions: List[Solution]
 
 class RoundRevealed(Message, NamedTuple):
     chat: Chat
