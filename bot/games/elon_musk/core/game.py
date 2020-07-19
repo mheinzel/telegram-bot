@@ -53,7 +53,7 @@ class Game:
 
         giving_problem_chat = self.private_chats[giving_problem.id]
         reply_context = reply.SubmitProblem(new_round.id)
-        res  = [message.RoundStarted(self.chat, self.participants, giving_problem)]
+        res  = [message.RoundStarted(self.chat, giving_problem, giving_solutions)]
         res += [message.RoundDemandProblem(giving_problem_chat, giving_problem, reply_context)]
         return res
 

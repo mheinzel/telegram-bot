@@ -82,8 +82,8 @@ assert len(res) == 2
 # new game is announced
 assert isinstance(res[0], msg.RoundStarted)
 assert res[0].chat == group1
-assert res[0].participants == [user1, user2, user3, user4]
 assert res[0].giving_problem == user1
+assert res[0].giving_solutions == [user2, user3, user4]
 # one person is asked to describe a problem (privately)
 assert isinstance(res[1], msg.RoundDemandProblem)
 assert res[1].chat == private1
@@ -158,13 +158,12 @@ assert res[0].solutions[0] == solution_user2
 assert res[0].solutions[1] == solution_user3
 assert res[0].solutions[2] == solution_user4
 
-# the game is revealed
+# the round is revealed
 res = game1.reveal()
 assert len(res) == 1
 assert isinstance(res[0], msg.RoundRevealed)
 assert res[0].chat == group1
 assert res[0].elon_musk == round1_elon
-
 
 # start another round
 res = game1.start_round()
@@ -172,8 +171,8 @@ assert len(res) == 2
 # new game is announced
 assert isinstance(res[0], msg.RoundStarted)
 assert res[0].chat == group1
-assert res[0].participants == [user1, user2, user3, user4, user5]
 assert res[0].giving_problem == user2
+assert res[0].giving_solutions == [user3, user4, user5, user1]
 # next person is asked to describe a problem (privately)
 assert isinstance(res[1], msg.RoundDemandProblem)
 assert res[1].chat == private2

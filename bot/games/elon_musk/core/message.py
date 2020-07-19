@@ -28,8 +28,8 @@ class GameNotEnoughParticipants(Message, NamedTuple):
 
 class RoundStarted(Message, NamedTuple):
     chat: Chat
-    participants: List[User]
     giving_problem: User
+    giving_solutions: List[User]
 
 class RoundDemandProblem(Message, NamedTuple):
     chat: Chat
