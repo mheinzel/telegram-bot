@@ -1,7 +1,7 @@
 from typing import NamedTuple, List
 from telegram import Chat, User
 import bot.games.elon_musk.core.reply as reply
-from bot.games.elon_musk.core.shared import Problem, Solution
+from bot.games.elon_musk.core.round import Problem, Solution
 
 # I would like to move the 'chat' attribute here, but subclass relationships
 # between NamedTuples don't seem to work as expected.

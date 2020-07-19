@@ -1,8 +1,8 @@
 from telegram import User, Chat
-from bot.games.elon_musk.core.game import Game, create_game
-from bot.games.elon_musk.core.shared import Problem, Solution
 import bot.games.elon_musk.core.message as msg
 import bot.games.elon_musk.core.reply as rpl
+from bot.games.elon_musk.core.round import Problem, Solution
+from bot.games.elon_musk.core.game import Game, create_game
 
 user1 = User(1, "User 1", is_bot = False)
 user2 = User(2, "User 2", is_bot = False)
