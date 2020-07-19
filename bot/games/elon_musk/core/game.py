@@ -39,12 +39,18 @@ class Game:
 
         if self.current_round is not None:
             self.history += [self.current_round]
-        giving_problem = self.participants[0]
-        giving_solutions = self.participants[1:]
+            # rotate participants, so someone else submits a problem
+            self.participants = self.participants[1:] + [self.participants[0]]
+
         # new round id is larger than all previous ones, starting at 1
         new_round_id = max((r.id for r in self.history), default = 0) + 1
+        # first participant submits problem, others submit solutions
+        giving_problem = self.participants[0]
+        giving_solutions = self.participants[1:]
         new_round = Round(new_round_id, giving_problem, giving_solutions)
+
         self.current_round = new_round
+
         giving_problem_chat = self.private_chats[giving_problem.id]
         reply_context = reply.SubmitProblem(new_round.id)
         res  = [message.RoundStarted(self.chat, self.participants, giving_problem)]
