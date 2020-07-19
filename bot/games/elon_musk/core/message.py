@@ -38,15 +38,22 @@ class RoundDemandProblem(Message, NamedTuple):
 
 class RoundAcceptProblem(Message, NamedTuple):
     chat: Chat
+    code: str
 
 class RoundNotifyProblem(Message, NamedTuple):
     chat: Chat
+    giving_problem: User
     problem: Problem
+
+# Doesn't get the problem.
+class RoundNotifyProblemElonMusk(Message, NamedTuple):
+    chat: Chat
+    giving_problem: User
 
 class RoundDemandSolutions(Message, NamedTuple):
     chat: Chat
-    problem: Problem
     giving_problem: User
+    problem: Problem
     solution_order: List[User]
     reply_context: reply.ReplyContext
 

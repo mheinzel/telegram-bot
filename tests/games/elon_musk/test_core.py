@@ -101,8 +101,7 @@ assert res[1].solution_order == [user2, user3, user4]
 assert isinstance(res[1].reply_context, rpl.SubmitSolution)
 assert res[1].reply_context.round == round1
 # tell every user the problem (first one is the randomly chosen "Elon Musk")
-assert isinstance(res[2], msg.RoundNotifyProblem)
-assert res[2].problem == Problem(user1, "Elon Musk")
+assert isinstance(res[2], msg.RoundNotifyProblemElonMusk) # doesn't contain problem
 assert isinstance(res[3], msg.RoundNotifyProblem)
 assert res[3].problem == problem1
 assert isinstance(res[4], msg.RoundNotifyProblem)
