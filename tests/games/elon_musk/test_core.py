@@ -130,6 +130,16 @@ assert isinstance(res[0], msg.RoundSolutionAlreadySubmitted)
 assert res[0].chat == group1
 assert res[0].solution == solution_user2
 
+# user5 joins while the round is still running
+res = game1.join_private(user = user5, chat = private5)
+assert len(res) == 2
+assert isinstance(res[0], msg.GameJoinedPrivate)
+assert res[0].chat == private5
+assert res[0].joined_user == user5
+assert isinstance(res[1], msg.GameJoined)
+assert res[1].chat == group1
+assert res[1].joined_user == user5
+
 # user4 is still missing, so we can't reveal
 res = game1.reveal()
 assert len(res) == 1
