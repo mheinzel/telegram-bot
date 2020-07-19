@@ -126,7 +126,7 @@ assert len(res) == 0 # TODO any further updates here?
 # solutions can only be submitted once
 res = game1.submit_solution(round1, solution_user2)
 assert len(res) == 1
-assert isinstance(res[0], msg.SolutionAlreadySubmitted)
+assert isinstance(res[0], msg.RoundSolutionAlreadySubmitted)
 assert res[0].chat == group1
 assert res[0].solution == solution_user2
 

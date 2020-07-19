@@ -74,3 +74,14 @@ class Game:
                 chat = self.private_chats[u.id]
                 res += [message.RoundNotifyProblem(chat, problem)]
         return res
+
+    def submit_solution(self, round_id, solution):
+        # TODO: add helpful messages
+        if round_id != self.current_round.id:
+            return []
+        existing_solution = self.current_round.solutions[solution.submitted_by]
+        if existing_solution is not None:
+            return [message.RoundSolutionAlreadySubmitted(self.chat, existing_solution)]
+
+        self.current_round.solutions[solution.submitted_by] = solution
+        return []

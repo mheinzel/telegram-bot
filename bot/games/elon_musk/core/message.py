@@ -55,7 +55,7 @@ class RoundDemandSolutions(Message, NamedTuple):
     solution_order: List[User]
     reply_context: reply.ReplyContext
 
-class SolutionAlreadySubmitted(Message, NamedTuple):
+class RoundSolutionAlreadySubmitted(Message, NamedTuple):
     chat: Chat
     solution: Solution
 
