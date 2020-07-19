@@ -51,30 +51,26 @@ class Game:
         res += [message.RoundDemandProblem(giving_problem_chat, giving_problem, reply_context)]
         return res
 
-    # Currently (deliberately) doesn't check who submitted the solution.
-    # Maybe this allows things like forwarding problems to other users and
-    # letting them submit a solution by replying to the message?
     def submit_problem(self, round_id, problem):
+        # TODO: add helpful messages
         if round_id != self.current_round.id:
-            # TODO: add helpful message
+            return []
+        if problem.submitted_by != self.current_round.giving_problem:
             return []
         if self.current_round.problem is not None:
-            # TODO: add helpful message
             return []
 
         self.current_round.problem = problem
-        # We could also use `problem.submitted_by` here, but at noted above,
-        # we don't check who that is, so we might not have their private chat.
-        giving_problem = self.current_round.giving_problem
+        # TODO: order of giving_solutions?
         giving_solutions = list(self.current_round.solutions.keys())
-        elon_musk = giving_solutions[0] # TODO: pick randomly
-        def message_notify(user, their_problem):
-            chat = self.private_chats[user.id]
-            return message.RoundNotifyProblem(chat, giving_problem, their_problem)
-        res  = [message.RoundAcceptProblem(self.private_chats[giving_problem.id], self.code)]
-        res += [message_notify(elon_musk, None)] # doesn't get problem
+        elon_musk_chat = self.private_chats[self.current_round.elon_musk.id]
+
+        res  = [message.RoundAcceptProblem(self.private_chats[problem.submitted_by.id], self.code)]
+        reply_context = reply.SubmitSolution(self.current_round.id)
+        res += [message.RoundDemandSolutions(self.chat, problem, giving_solutions, reply_context)]
+        res += [message.RoundNotifyProblemElonMusk(elon_musk_chat, problem.submitted_by)] # doesn't get problem
         for u in giving_solutions:
-            if u != elon_musk:
-                res += [message_notify(u, problem)]
-        return giving_solutions
+            if u != self.current_round.elon_musk:
+                chat = self.private_chats[u.id]
+                res += [message.RoundNotifyProblem(chat, problem)]
         return res

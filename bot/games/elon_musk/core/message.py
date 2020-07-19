@@ -42,7 +42,6 @@ class RoundAcceptProblem(Message, NamedTuple):
 
 class RoundNotifyProblem(Message, NamedTuple):
     chat: Chat
-    giving_problem: User
     problem: Problem
 
 # Doesn't get the problem.
@@ -52,7 +51,6 @@ class RoundNotifyProblemElonMusk(Message, NamedTuple):
 
 class RoundDemandSolutions(Message, NamedTuple):
     chat: Chat
-    giving_problem: User
     problem: Problem
     solution_order: List[User]
     reply_context: reply.ReplyContext

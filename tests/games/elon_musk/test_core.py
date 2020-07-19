@@ -102,7 +102,6 @@ assert res[0].chat == private1
 assert isinstance(res[1], msg.RoundDemandSolutions)
 assert res[1].chat == group1
 assert res[1].problem == problem1
-assert res[1].giving_problem == user1
 assert res[1].solution_order == [user2, user3, user4]
 assert isinstance(res[1].reply_context, rpl.SubmitSolution)
 assert res[1].reply_context.round == round1
