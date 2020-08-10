@@ -19,7 +19,7 @@ private5 = Chat(15, 'private')
 group1 = Chat(101, 'group')
 
 # create new game
-game1, res = create_game(chat = group1, code = "ELON123")
+game1, res = create_game(group_chat = group1, code = "ELON123")
 assert len(res) == 1
 assert isinstance(res[0], msg.GameCreated)
 assert res[0].chat == group1
@@ -27,7 +27,7 @@ assert res[0].code == "ELON123"
 
 # users can join the game via private chat
 # user1
-res = game1.join_private(user = user1, chat = private1)
+res = game1.join_private(user = user1, private_chat = private1)
 assert len(res) == 2
 assert isinstance(res[0], msg.GameJoinedPrivate)
 assert res[0].chat == private1
@@ -36,7 +36,7 @@ assert isinstance(res[1], msg.GameJoined)
 assert res[1].chat == group1
 assert res[1].joined_user == user1
 # user2
-res = game1.join_private(user = user2, chat = private2)
+res = game1.join_private(user = user2, private_chat = private2)
 assert len(res) == 2
 assert isinstance(res[0], msg.GameJoinedPrivate)
 assert res[0].chat == private2
@@ -45,7 +45,7 @@ assert isinstance(res[1], msg.GameJoined)
 assert res[1].chat == group1
 assert res[1].joined_user == user2
 # user3
-res = game1.join_private(user = user3, chat = private3)
+res = game1.join_private(user = user3, private_chat = private3)
 assert len(res) == 2
 assert isinstance(res[0], msg.GameJoinedPrivate)
 assert res[0].chat == private3
@@ -55,7 +55,7 @@ assert res[1].chat == group1
 assert res[1].joined_user == user3
 
 # users can only join once
-res = game1.join_private(user = user2, chat = private2)
+res = game1.join_private(user = user2, private_chat = private2)
 assert len(res) == 0
 
 # at least 4 participants are needed to start a game
@@ -67,7 +67,7 @@ assert res[0].participants == [user1, user2, user3]
 assert game1.current_round is None
 
 # user4
-res = game1.join_private(user = user4, chat = private4)
+res = game1.join_private(user = user4, private_chat = private4)
 assert len(res) == 2
 assert isinstance(res[0], msg.GameJoinedPrivate)
 assert res[0].chat == private4
@@ -131,7 +131,7 @@ assert res[0].chat == group1
 assert res[0].solution == solution_user2
 
 # user5 joins while the round is still running
-res = game1.join_private(user = user5, chat = private5)
+res = game1.join_private(user = user5, private_chat = private5)
 assert len(res) == 2
 assert isinstance(res[0], msg.GameJoinedPrivate)
 assert res[0].chat == private5

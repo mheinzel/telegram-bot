@@ -2,14 +2,14 @@ import bot.games.elon_musk.core.message as message
 import bot.games.elon_musk.core.reply as reply
 from bot.games.elon_musk.core.round import Round, Problem, Solution
 
-def create_game(chat, code):
-    game = Game(chat, code)
+def create_game(group_chat, code):
+    game = Game(group_chat, code)
     responses = game.init()
     return game, responses
 
 class Game:
-    def __init__(self, chat, code):
-        self.chat = chat # TODO: rename self.group_chat
+    def __init__(self, group_chat, code):
+        self.group_chat = group_chat
         self.code = code
         self.participants = []
         self.private_chats = {}
@@ -17,17 +17,17 @@ class Game:
         self.history = []
 
     def init(self):
-        return [message.GameCreated(self.chat, self.code)]
+        return [message.GameCreated(self.group_chat, self.code)]
 
-    def join_private(self, user, chat):
+    def join_private(self, user, private_chat):
         if user in self.participants:
             # TODO: add helpful message
             return []
 
         self.participants.append(user)
-        self.private_chats[user.id] = chat
-        res  = [message.GameJoinedPrivate(chat, self.code, user)]
-        res += [message.GameJoined(self.chat, user)]
+        self.private_chats[user.id] = private_chat
+        res  = [message.GameJoinedPrivate(private_chat, self.code, user)]
+        res += [message.GameJoined(self.group_chat, user)]
         return res
 
     def start_round(self):
@@ -35,7 +35,7 @@ class Game:
         # If only two others submit solutions, they know who the other one is.
         # So we need at least 4 participants.
         if len(self.participants) < 4:
-            return [message.GameNotEnoughParticipants( self.chat, self.code, self.participants)]
+            return [message.GameNotEnoughParticipants(self.group_chat, self.code, self.participants)]
 
         if self.current_round is not None:
             self.history += [self.current_round]
@@ -53,7 +53,7 @@ class Game:
 
         giving_problem_chat = self.private_chats[giving_problem.id]
         reply_context = reply.SubmitProblem(new_round.id)
-        res  = [message.RoundStarted(self.chat, giving_problem, giving_solutions)]
+        res  = [message.RoundStarted(self.group_chat, giving_problem, giving_solutions)]
         res += [message.RoundDemandProblem(giving_problem_chat, giving_problem, reply_context)]
         return res
 
@@ -73,12 +73,12 @@ class Game:
 
         res  = [message.RoundAcceptProblem(self.private_chats[problem.submitted_by.id], self.code)]
         reply_context = reply.SubmitSolution(self.current_round.id)
-        res += [message.RoundDemandSolutions(self.chat, problem, giving_solutions, reply_context)]
+        res += [message.RoundDemandSolutions(self.group_chat, problem, giving_solutions, reply_context)]
         res += [message.RoundNotifyProblemElonMusk(elon_musk_chat, problem.submitted_by)] # doesn't get problem
         for u in giving_solutions:
             if u != self.current_round.elon_musk:
-                chat = self.private_chats[u.id]
-                res += [message.RoundNotifyProblem(chat, problem)]
+                private_chat = self.private_chats[u.id]
+                res += [message.RoundNotifyProblem(private_chat, problem)]
         return res
 
     def submit_solution(self, round_id, solution):
@@ -89,21 +89,21 @@ class Game:
             return []
         existing_solution = self.current_round.solutions[solution.submitted_by]
         if existing_solution is not None:
-            return [message.RoundSolutionAlreadySubmitted(self.chat, existing_solution)]
+            return [message.RoundSolutionAlreadySubmitted(self.group_chat, existing_solution)]
 
         self.current_round.solutions[solution.submitted_by] = solution
 
         if len(self.current_round.missing_solutions()) == 0:
             problem = self.current_round.problem
             solutions = list(self.current_round.solutions.values())
-            return [message.RoundSummary(self.chat, problem, solutions)]
+            return [message.RoundSummary(self.group_chat, problem, solutions)]
 
         return []
 
     def reveal(self):
         missing_solutions = list(self.current_round.missing_solutions())
         if len(missing_solutions) > 0:
-            return [message.RoundNotFinishedYet(self.chat, missing_solutions)]
+            return [message.RoundNotFinishedYet(self.group_chat, missing_solutions)]
 
         elon_musk = self.current_round.elon_musk
-        return [message.RoundRevealed(self.chat, self.code, elon_musk)]
+        return [message.RoundRevealed(self.group_chat, self.code, elon_musk)]
