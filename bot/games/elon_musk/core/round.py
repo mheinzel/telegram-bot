@@ -1,4 +1,5 @@
 import random
+from collections import OrderedDict
 from typing import NamedTuple, List, Dict
 from telegram import User
 
@@ -18,10 +19,11 @@ class Round():
         self.giving_problem = giving_problem
         # no problem or solution was given yet
         self.problem = None
-        self.solutions = {u: None for u in giving_solutions}
+        self.solutions = OrderedDict((u, None) for u in giving_solutions)
         self.elon_musk = random.choice(giving_solutions)
         # This can be violated if `giving_solutions` contains duplicates.
         assert len(self.solutions) == len(giving_solutions)
 
+    # The users that still need to submit a solution, in order
     def missing_solutions(self):
         return [u for u, s in self.solutions.items() if s is None]

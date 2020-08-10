@@ -69,8 +69,7 @@ class Game:
             return []
 
         self.current_round.problem = problem
-        # TODO: order of giving_solutions?
-        giving_solutions = list(self.current_round.solutions.keys())
+        giving_solutions = list(self.current_round.missing_solutions())
         elon_musk_chat = self.private_chats[self.current_round.elon_musk.id]
 
         res  = [message.RoundAcceptProblem(submitter_chat, self.code)]
