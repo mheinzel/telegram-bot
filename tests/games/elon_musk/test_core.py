@@ -147,9 +147,11 @@ solution_user3 = Solution(user3, "Solution 3")
 solution_user4 = Solution(user4, "Solution 4")
 solution_user5 = Solution(user5, "Solution 5")
 res = game1.submit_solution(round1, solution_user2)
-assert len(res) == 0 # TODO any further updates here?
+# we don't want the noise of acknowledging every solution in the group chat.
+# if unsure, participants can try revealing the round.
+assert len(res) == 0
 res = game1.submit_solution(round1, solution_user3)
-assert len(res) == 0 # TODO any further updates here?
+assert len(res) == 0
 
 # solutions can only be submitted once
 res = game1.submit_solution(round1, solution_user2)
