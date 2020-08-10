@@ -1,3 +1,4 @@
+from telegram import Chat, User
 import bot.games.elon_musk.core.message as message
 import bot.games.elon_musk.core.reply as reply
 from bot.games.elon_musk.core.round import Round, Problem, Solution
@@ -8,7 +9,7 @@ def create_game(group_chat, code):
     return game, responses
 
 class Game:
-    def __init__(self, group_chat, code):
+    def __init__(self, group_chat: Chat, code: str):
         self.group_chat = group_chat
         self.code = code
         self.participants = []
@@ -19,7 +20,7 @@ class Game:
     def init(self):
         return [message.GameCreated(self.group_chat, self.code)]
 
-    def join_private(self, user, private_chat):
+    def join_private(self, user: User, private_chat: Chat):
         if user in self.participants:
             return [message.GameJoinedAlready(private_chat, self.code)]
 
@@ -57,7 +58,7 @@ class Game:
         res += [message.RoundDemandProblem(giving_problem_chat, giving_problem, reply_context)]
         return res
 
-    def submit_problem(self, round_id, problem):
+    def submit_problem(self, round_id: int, problem: Problem):
         submitter_chat = self.private_chats[problem.submitted_by.id]
 
         if round_id != self.current_round.id:
@@ -85,7 +86,7 @@ class Game:
                 res += [message.RoundNotifyProblem(private_chat, problem)]
         return res
 
-    def submit_solution(self, round_id, solution):
+    def submit_solution(self, round_id: int, solution: Solution):
         submitter_chat = self.private_chats[solution.submitted_by.id]
 
         existing_solution = self.current_round.solutions.get(solution.submitted_by)
