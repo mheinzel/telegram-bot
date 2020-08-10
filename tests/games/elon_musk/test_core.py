@@ -17,13 +17,14 @@ private4 = Chat(14, 'private')
 private5 = Chat(15, 'private')
 
 group1 = Chat(101, 'group')
+code1 = "ELON123"
 
 # create new game
-game1, res = create_game(group_chat = group1, code = "ELON123")
+game1, res = create_game(group_chat = group1, code = code1)
 assert len(res) == 1
 assert isinstance(res[0], msg.GameCreated)
 assert res[0].chat == group1
-assert res[0].code == "ELON123"
+assert res[0].code == code1
 
 # users can join the game via private chat
 # user1
@@ -56,7 +57,10 @@ assert res[1].joined_user == user3
 
 # users can only join once
 res = game1.join_private(user = user2, private_chat = private2)
-assert len(res) == 0
+assert len(res) == 1
+assert isinstance(res[0], msg.GameJoinedAlready)
+assert res[0].chat == private2
+assert res[0].code == code1
 
 # at least 4 participants are needed to start a game
 res = game1.start_round()

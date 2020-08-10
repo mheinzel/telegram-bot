@@ -21,8 +21,7 @@ class Game:
 
     def join_private(self, user, private_chat):
         if user in self.participants:
-            # TODO: add helpful message
-            return []
+            return [message.GameJoinedAlready(private_chat, self.code)]
 
         self.participants.append(user)
         self.private_chats[user.id] = private_chat
@@ -51,6 +50,7 @@ class Game:
 
         self.current_round = new_round
 
+        # FUTUREWORK: move to Round, but it currently doesn't know about the private_chat
         giving_problem_chat = self.private_chats[giving_problem.id]
         reply_context = reply.SubmitProblem(new_round.id)
         res  = [message.RoundStarted(self.group_chat, giving_problem, giving_solutions)]

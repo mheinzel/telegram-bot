@@ -12,6 +12,10 @@ class GameCreated(Message, NamedTuple):
     chat: Chat
     code: str
 
+class GameJoinedAlready(Message, NamedTuple):
+    chat: Chat
+    code: str
+
 class GameJoinedPrivate(Message, NamedTuple):
     chat: Chat
     code: str
