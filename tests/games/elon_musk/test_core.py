@@ -102,7 +102,14 @@ assert isinstance(res[0], msg.RoundSolutionNotExpected)
 assert res[0].chat == private3
 assert res[0].code == code1
 
-# this person can submit a problem
+# most participants can't submit a problem
+res = game1.submit_problem(round1, Problem(user2, "I can't submit a problem."))
+assert len(res) == 1
+assert isinstance(res[0], msg.RoundProblemNotExpected)
+assert res[0].chat == private2
+assert res[0].code == code1
+
+# but one person can submit a problem
 problem1 = Problem(user1, "Life is too short.")
 res = game1.submit_problem(round1, problem1)
 assert len(res) == 5
@@ -124,6 +131,14 @@ assert isinstance(res[4], msg.RoundNotifyProblem)
 assert res[4].problem == problem1
 assert set(r.chat for r in res[2:5]) == {private2, private3, private4}
 round1_elon = [user2, user3, user4][[private2, private3, private4].index(res[2].chat)]
+
+# problem can't be changed afterwards
+res = game1.submit_problem(round1, Problem(user1, "Life is too long."))
+assert len(res) == 1
+# acknowledge
+assert isinstance(res[0], msg.RoundProblemAlreadySubmitted)
+assert res[0].chat == private1
+assert res[0].problem == problem1
 
 # other participants submit their solutions in order
 solution_user1 = Solution(user1, "Solution 1")

@@ -60,13 +60,16 @@ class Game:
     def submit_problem(self, round_id, problem):
         submitter_chat = self.private_chats[problem.submitted_by.id]
 
-        # TODO: add helpful messages
         if round_id != self.current_round.id:
-            return []
+            return [message.RoundProblemNotExpected(submitter_chat, self.code)]
         if problem.submitted_by != self.current_round.giving_problem:
-            return []
-        if self.current_round.problem is not None:
-            return []
+            return [message.RoundProblemNotExpected(submitter_chat, self.code)]
+
+        existing_problem = self.current_round.problem
+        if existing_problem is not None:
+            # This should only be sent to the person that actually submitted the problem.
+            # We don't want to leak the problem to others!
+            return [message.RoundProblemAlreadySubmitted(submitter_chat, existing_problem)]
 
         self.current_round.problem = problem
         giving_solutions = list(self.current_round.missing_solutions())
