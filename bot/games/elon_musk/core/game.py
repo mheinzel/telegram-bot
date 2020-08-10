@@ -58,6 +58,8 @@ class Game:
         return res
 
     def submit_problem(self, round_id, problem):
+        submitter_chat = self.private_chats[problem.submitted_by.id]
+
         # TODO: add helpful messages
         if round_id != self.current_round.id:
             return []
@@ -71,7 +73,7 @@ class Game:
         giving_solutions = list(self.current_round.solutions.keys())
         elon_musk_chat = self.private_chats[self.current_round.elon_musk.id]
 
-        res  = [message.RoundAcceptProblem(self.private_chats[problem.submitted_by.id], self.code)]
+        res  = [message.RoundAcceptProblem(submitter_chat, self.code)]
         reply_context = reply.SubmitSolution(self.current_round.id)
         res += [message.RoundDemandSolutions(self.group_chat, problem, giving_solutions, reply_context)]
         res += [message.RoundNotifyProblemElonMusk(elon_musk_chat, problem.submitted_by)] # doesn't get problem
@@ -82,20 +84,25 @@ class Game:
         return res
 
     def submit_solution(self, round_id, solution):
-        # TODO: add helpful messages
-        if round_id != self.current_round.id:
-            return []
-        if self.current_round.problem is None:
-            return []
-        existing_solution = self.current_round.solutions[solution.submitted_by]
+        submitter_chat = self.private_chats[solution.submitted_by.id]
+
+        existing_solution = self.current_round.solutions.get(solution.submitted_by)
         if existing_solution is not None:
             return [message.RoundSolutionAlreadySubmitted(self.group_chat, existing_solution)]
+
+        if round_id != self.current_round.id:
+            return [message.RoundSolutionNotExpected(submitter_chat, self.code)]
+        if self.current_round.problem is None:
+            return [message.RoundSolutionNotExpected(submitter_chat, self.code)]
+        if solution.submitted_by not in self.current_round.missing_solutions():
+            return [message.RoundSolutionNotExpected(submitter_chat, self.code)]
 
         self.current_round.solutions[solution.submitted_by] = solution
 
         if len(self.current_round.missing_solutions()) == 0:
             problem = self.current_round.problem
             solutions = list(self.current_round.solutions.values())
+            # Group chat, because we assume solutions are submitted there, too.
             return [message.RoundSummary(self.group_chat, problem, solutions)]
 
         return []

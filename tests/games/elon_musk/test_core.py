@@ -95,6 +95,13 @@ assert res[1].user == user1
 assert isinstance(res[1].reply_context, rpl.SubmitProblem)
 round1 = res[1].reply_context.round
 
+# solutions can't be submitted yet
+res = game1.submit_solution(round1, Solution(user3, "blabla"))
+assert len(res) == 1
+assert isinstance(res[0], msg.RoundSolutionNotExpected)
+assert res[0].chat == private3
+assert res[0].code == code1
+
 # this person can submit a problem
 problem1 = Problem(user1, "Life is too short.")
 res = game1.submit_problem(round1, problem1)
@@ -119,9 +126,11 @@ assert set(r.chat for r in res[2:5]) == {private2, private3, private4}
 round1_elon = [user2, user3, user4][[private2, private3, private4].index(res[2].chat)]
 
 # other participants submit their solutions in order
+solution_user1 = Solution(user1, "Solution 1")
 solution_user2 = Solution(user2, "Solution 2")
 solution_user3 = Solution(user3, "Solution 3")
 solution_user4 = Solution(user4, "Solution 4")
+solution_user5 = Solution(user5, "Solution 5")
 res = game1.submit_solution(round1, solution_user2)
 assert len(res) == 0 # TODO any further updates here?
 res = game1.submit_solution(round1, solution_user3)
@@ -134,6 +143,13 @@ assert isinstance(res[0], msg.RoundSolutionAlreadySubmitted)
 assert res[0].chat == group1
 assert res[0].solution == solution_user2
 
+# can't submit both problem and solution
+res = game1.submit_solution(round1, solution_user1)
+assert len(res) == 1
+assert isinstance(res[0], msg.RoundSolutionNotExpected)
+assert res[0].chat == private1
+assert res[0].code == code1
+
 # user5 joins while the round is still running
 res = game1.join_private(user = user5, private_chat = private5)
 assert len(res) == 2
@@ -143,6 +159,13 @@ assert res[0].joined_user == user5
 assert isinstance(res[1], msg.GameJoined)
 assert res[1].chat == group1
 assert res[1].joined_user == user5
+
+# can't submit solution if not part of the round
+res = game1.submit_solution(round1, solution_user5)
+assert len(res) == 1
+assert isinstance(res[0], msg.RoundSolutionNotExpected)
+assert res[0].chat == private5
+assert res[0].code == code1
 
 # user4 is still missing, so we can't reveal
 res = game1.reveal()

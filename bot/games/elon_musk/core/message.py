@@ -53,6 +53,10 @@ class RoundNotifyProblemElonMusk(Message, NamedTuple):
     chat: Chat
     giving_problem: User
 
+class RoundSolutionNotExpected(Message, NamedTuple):
+    chat: Chat
+    code: str
+
 class RoundDemandSolutions(Message, NamedTuple):
     chat: Chat
     problem: Problem
