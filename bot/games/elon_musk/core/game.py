@@ -78,7 +78,7 @@ class Game:
 
         res  = [message.RoundAcceptProblem(submitter_chat, self.code)]
         reply_context = reply.SubmitSolution(self.code, self.current_round.id)
-        res += [message.RoundDemandSolutions(self.group_chat, problem, giving_solutions, reply_context)]
+        res += [message.RoundDemandSolutions(self.group_chat, giving_solutions, reply_context)]
         # Elon Musk doesn't get the problem
         res += [message.RoundNotifyProblemElonMusk(elon_musk_chat, problem.submitted_by)]
         for u in giving_solutions:
@@ -104,10 +104,9 @@ class Game:
         self.current_round.solutions[solution.submitted_by] = solution
 
         if len(self.current_round.missing_solutions()) == 0:
-            problem = self.current_round.problem
             solutions = list(self.current_round.solutions.values())
             # Group chat, because we assume solutions are submitted there, too.
-            return [message.RoundSummary(self.group_chat, problem, solutions)]
+            return [message.RoundSummary(self.group_chat, solutions)]
 
         return []
 
@@ -117,4 +116,5 @@ class Game:
             return [message.RoundNotFinishedYet(self.group_chat, missing_solutions)]
 
         elon_musk = self.current_round.elon_musk
-        return [message.RoundRevealed(self.group_chat, self.code, elon_musk)]
+        problem = self.current_round.problem
+        return [message.RoundRevealed(self.group_chat, self.code, problem, elon_musk)]

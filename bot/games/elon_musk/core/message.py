@@ -78,7 +78,6 @@ class RoundNotifyProblemElonMusk(Message, NamedTuple):
 
 class RoundDemandSolutions(Message, NamedTuple):
     chat: Chat
-    problem: Problem
     solution_order: List[User]
     reply_context: reply.SubmitSolution
 
@@ -96,10 +95,10 @@ class RoundNotFinishedYet(Message, NamedTuple):
 
 class RoundSummary(Message, NamedTuple):
     chat: Chat
-    problem: Problem
     solutions: List[Solution]
 
 class RoundRevealed(Message, NamedTuple):
     chat: Chat
     code: str
+    problem: Problem
     elon_musk: User

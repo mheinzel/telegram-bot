@@ -119,7 +119,6 @@ assert res[0].chat == private1
 # update the group chat
 assert isinstance(res[1], msg.RoundDemandSolutions)
 assert res[1].chat == group1
-assert res[1].problem == problem1
 assert res[1].solution_order == [user2, user3, user4]
 assert isinstance(res[1].reply_context, rpl.SubmitSolution)
 assert res[1].reply_context.round == round1
@@ -196,7 +195,6 @@ res = game1.submit_solution(round1, solution_user4)
 assert len(res) == 1
 assert isinstance(res[0], msg.RoundSummary)
 assert res[0].chat == group1
-assert res[0].problem == problem1
 assert len(res[0].solutions) == 3
 assert res[0].solutions[0] == solution_user2
 assert res[0].solutions[1] == solution_user3
@@ -207,6 +205,8 @@ res = game1.reveal()
 assert len(res) == 1
 assert isinstance(res[0], msg.RoundRevealed)
 assert res[0].chat == group1
+assert res[0].code == code1
+assert res[0].problem == problem1
 assert res[0].elon_musk == round1_elon
 
 # start another round
