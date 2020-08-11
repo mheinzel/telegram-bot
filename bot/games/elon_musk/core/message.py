@@ -102,3 +102,6 @@ class RoundRevealed(Message, NamedTuple):
     code: str
     problem: Problem
     elon_musk: User
+
+def render(message: Message):
+    return ""
