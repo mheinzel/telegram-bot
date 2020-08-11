@@ -12,6 +12,21 @@ class GameCreated(Message, NamedTuple):
     chat: Chat
     code: str
 
+class GameCreatedAlready(Message, NamedTuple):
+    chat: Chat
+    code: str
+
+class GameNotFoundByCode(Message, NamedTuple):
+    chat: Chat
+    code: str
+
+class GameNotFoundForChat(Message, NamedTuple):
+    chat: Chat
+
+class GameMustBeJoinedFromPrivateChat(Message, NamedTuple):
+    chat: Chat
+    joined_user: User
+
 class GameJoinedAlready(Message, NamedTuple):
     chat: Chat
     code: str
@@ -38,7 +53,7 @@ class RoundStarted(Message, NamedTuple):
 class RoundDemandProblem(Message, NamedTuple):
     chat: Chat
     user: User
-    reply_context: reply.ReplyContext
+    reply_context: reply.SubmitProblem
 
 class RoundProblemNotExpected(Message, NamedTuple):
     chat: Chat
@@ -65,7 +80,7 @@ class RoundDemandSolutions(Message, NamedTuple):
     chat: Chat
     problem: Problem
     solution_order: List[User]
-    reply_context: reply.ReplyContext
+    reply_context: reply.SubmitSolution
 
 class RoundSolutionNotExpected(Message, NamedTuple):
     chat: Chat

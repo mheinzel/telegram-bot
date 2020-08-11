@@ -53,7 +53,7 @@ class Game:
 
         # FUTUREWORK: move to Round, but it currently doesn't know about the private_chat
         giving_problem_chat = self.private_chats[giving_problem.id]
-        reply_context = reply.SubmitProblem(new_round.id)
+        reply_context = reply.SubmitProblem(self.code, new_round.id)
         res  = [message.RoundStarted(self.group_chat, giving_problem, giving_solutions)]
         res += [message.RoundDemandProblem(giving_problem_chat, giving_problem, reply_context)]
         return res
@@ -77,9 +77,10 @@ class Game:
         elon_musk_chat = self.private_chats[self.current_round.elon_musk.id]
 
         res  = [message.RoundAcceptProblem(submitter_chat, self.code)]
-        reply_context = reply.SubmitSolution(self.current_round.id)
+        reply_context = reply.SubmitSolution(self.code, self.current_round.id)
         res += [message.RoundDemandSolutions(self.group_chat, problem, giving_solutions, reply_context)]
-        res += [message.RoundNotifyProblemElonMusk(elon_musk_chat, problem.submitted_by)] # doesn't get problem
+        # Elon Musk doesn't get the problem
+        res += [message.RoundNotifyProblemElonMusk(elon_musk_chat, problem.submitted_by)]
         for u in giving_solutions:
             if u != self.current_round.elon_musk:
                 private_chat = self.private_chats[u.id]
